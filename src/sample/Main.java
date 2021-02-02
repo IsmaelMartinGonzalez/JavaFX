@@ -15,6 +15,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
 public class Main extends Application {
 
     public static Circle cercle;
@@ -25,34 +26,27 @@ public class Main extends Application {
     public void start(final Stage primaryStage) {
 
         canvas = new Pane();
-        final Scene escena = new Scene(canvas, 400, 400);
+        final Scene escena = new Scene(canvas, 1000, 500,Color.BLACK);
 
-        primaryStage.setTitle("Bolla Rebotant");
+        primaryStage.setTitle("Pong");
         primaryStage.setScene(escena);
         primaryStage.show();
 
         int radi=15;
-        cercle = new Circle(radi, Color.BLUE);
-        cercle.relocate(200-radi, 200-radi);
-
-
-        rectangle=new Rectangle(20,50,Color.RED);
-        rectangle.relocate(0,0);
+        cercle = new Circle(radi, Color.WHITE);
+        rectangle= new Rectangle(20,50,Color.WHITE);
+        cercle.relocate(500-radi, 20-radi);
+        rectangle.relocate(200,200);
 
         canvas.getChildren().addAll(cercle);
         canvas.getChildren().addAll(rectangle);
 
-
         final Timeline loop = new Timeline(new KeyFrame(Duration.millis(10), new EventHandler<ActionEvent>() {
 
 
-            // Formula en radians
-            //double deltaX = 3*Math.cos(Math.PI/3);
-            //double deltaY = 3*Math.sin(Math.PI/3);
-
             // Formula en graus
             double angle_en_radians =Math.toRadians(30);
-            int velocitat=1;
+            int velocitat=2;
             double deltaX = velocitat*Math.cos(angle_en_radians);
             double deltaY = velocitat*Math.sin(angle_en_radians);
 
@@ -62,15 +56,9 @@ public class Main extends Application {
 
             @Override
             public void handle(final ActionEvent t) {
-                //cercle.setLayoutX(cercle.getLayoutX() + deltaX/2);
 
                 cercle.setLayoutX(cercle.getLayoutX() + deltaX);
-                //cercle.setLayoutY(cercle.getLayoutY() + deltaY/3);
                 cercle.setLayoutY(cercle.getLayoutY() + deltaY);
-                //System.out.println(cercle.getLayoutX()+":"+cercle.getLayoutY());
-
-
-
                 final boolean alLimitDret = cercle.getLayoutX() >= (limits.getMaxX() - cercle.getRadius());
                 final boolean alLimitEsquerra = cercle.getLayoutX() <= (limits.getMinX() + cercle.getRadius());
                 final boolean alLimitInferior = cercle.getLayoutY() >= (limits.getMaxY() - cercle.getRadius());
@@ -80,14 +68,11 @@ public class Main extends Application {
                 if (alLimitDret || alLimitEsquerra) {
                     // Delta aleatori
                     // Multiplicam pel signe de deltaX per mantenir la trajectoria
-                    deltaX = Math.signum(deltaX)*(Math.random()*10+1);
-
                     deltaX *= -1;
                 }
                 if (alLimitInferior || alLimitSuperior) {
                     // Delta aleatori
                     // Multiplicam pel signe de deltaX per mantenir la trajectoria
-                    deltaY = Math.signum(deltaY)*(Math.random()*10+1);
 
                     deltaY *= -1;
                 }
@@ -97,7 +82,6 @@ public class Main extends Application {
         loop.setCycleCount(Timeline.INDEFINITE);
         loop.play();
     }
-
     public static void main(String[] args) {
         launch(args);
     }
